@@ -1,66 +1,80 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabase';
+import { motion } from 'framer-motion';
 import type { OrderStatus } from '../../../lib/types';
 
 type AdminOrder = {
   id: string;
   customer_name: string;
+  phone: string;
+  city: string;
   total_price: number;
   status: OrderStatus;
+  created_at: string;
 };
 
-const statuses: OrderStatus[] = ['pending', 'paid', 'shipped', 'delivered', 'cancelled'];
+const statuses: OrderStatus[] = ['pending', 'shipped', 'completed'];
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<AdminOrder[]>([]);
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await supabase
-        .from('orders')
-        .select('id,customer_name,total_price,status')
-        .order('created_at', { ascending: false });
-
-      setOrders((data as AdminOrder[] | null) || []);
+      const response = await fetch('/api/admin/orders');
+      const data = await response.json();
+      if (response.ok) setOrders(data.orders || []);
     };
 
     void load();
   }, []);
 
   const updateStatus = async (id: string, status: OrderStatus) => {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
-    await supabase.from('orders').update({ status }).eq('id', id);
+    setOrders((current) => current.map((order) => (order.id === id ? { ...order, status } : order)));
+    await fetch(`/api/admin/orders/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
   };
 
   return (
     <section className="stack">
-      <h1>إدارة الطلبات</h1>
-      {orders.length === 0 ? (
-        <p>لا توجد طلبات حالياً.</p>
-      ) : (
-        orders.map((order) => (
-          <article className="card" key={order.id}>
-            <div className="row">
-              <strong>{order.customer_name}</strong>
-              <span className="price">{order.total_price} ر.س</span>
-            </div>
-            <label>
-              الحالة
-              <select
-                className="select"
-                value={order.status}
-                onChange={(e) => void updateStatus(order.id, e.target.value as OrderStatus)}
-              >
-                {statuses.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </label>
-          </article>
-        ))
-      )}
+      <div>
+        <p className="eyebrow">إدارة الطلبات</p>
+        <h1 className="page-title">طلبات العملاء</h1>
+        <p className="page-copy">تغيير حالة الطلبات بين Pending وShipped وCompleted.</p>
+      </div>
+
+      <div className="dashboard-list">
+        {orders.length === 0 ? (
+          <div className="empty-state">
+            <p>لا توجد طلبات بعد.</p>
+          </div>
+        ) : (
+          orders.map((order) => (
+            <motion.article className="dashboard-row" key={order.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div>
+                <strong>{order.customer_name}</strong>
+                <div className="small">
+                  {order.city} • {order.phone} • {order.created_at.slice(0, 10)}
+                </div>
+              </div>
+              <strong>{order.total_price} ر.س</strong>
+              <label className="stack" style={{ minWidth: 180 }}>
+                <span className="small">الحالة</span>
+                <select className="select" value={order.status} onChange={(e) => void updateStatus(order.id, e.target.value as OrderStatus)}>
+                  {statuses.map((status) => (
+                    <option value={status} key={status}>
+                      {status === 'pending' ? 'قيد الانتظار' : status === 'shipped' ? 'تم الشحن' : 'مكتمل'}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </motion.article>
+          ))
+        )}
+      </div>
     </section>
   );
 }

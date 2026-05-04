@@ -1,20 +1,129 @@
 import type { Product } from './types';
 
+export const socialLinks = {
+  tiktok: 'https://www.tiktok.com/@mohammedalotaibi7632?_r=1&_t=ZS-965HMqPAGKu',
+  instagram: 'https://www.instagram.com/ltyby55722?igsh=MWhyM3lpdnhqNnB6bw%3D%3D&utm_source=qr',
+};
+
 export const products: Product[] = [
-  { id: '1', name: 'بروتين واي', description: 'دعم يومي لبناء العضلات.', price: 189, image: '💪', category: 'supplements' },
-  { id: '2', name: 'أوميغا 3', description: 'صحة القلب والمفاصل.', price: 79, image: '🐟', category: 'vitamins' },
-  { id: '3', name: 'فيتامين D3', description: 'مناعة وعظام أقوى.', price: 59, image: '☀️', category: 'vitamins' },
-  { id: '4', name: 'زبدة فول سوداني', description: 'مصدر دهون صحية ممتاز.', price: 34, image: '🥜', category: 'food' },
-  { id: '5', name: 'شوفان فاخر', description: 'فطور متوازن وسريع.', price: 27, image: '🌾', category: 'food' },
-  { id: '6', name: 'شيكر احترافي', description: 'خلط سريع بدون تكتلات.', price: 45, image: '🥤', category: 'accessories' },
-  { id: '7', name: 'باند مقاومة', description: 'تمارين منزلية فعالة.', price: 39, image: '🧘', category: 'accessories' },
-  { id: '8', name: 'كرياتين مونوهيدرات', description: 'قوة وأداء أعلى.', price: 119, image: '⚡', category: 'supplements' },
-  { id: '9', name: 'ملتي فيتامين', description: 'احتياج يومي متكامل.', price: 69, image: '💊', category: 'vitamins' },
-  { id: '10', name: 'بار بروتين', description: 'سناك عالي البروتين.', price: 12, image: '🍫', category: 'food' },
-  { id: '11', name: 'حصيرة يوغا', description: 'راحة وثبات في التمرين.', price: 99, image: '🧘‍♀️', category: 'accessories' },
+  {
+    id: '1',
+    slug: 'sports-starter-box',
+    name: 'بوكس البداية الرياضية ✨',
+    description:
+      'كل احتياجاتك الرياضية في بوكس واحد أنيق ومتكامل، يجمع بين الراحة والعملية ليكون خيارك المثالي لبدء أو تطوير روتينك الرياضي بكل سهولة.',
+    price: 279,
+    category: 'featured',
+    featured: true,
+    accent: 'from-fuchsia-500 via-purple-600 to-pink-400',
+    imageUrl: '/logo.png',
+  },
+  {
+    id: '2',
+    slug: 'sports-set',
+    name: 'طقم لبس رياضي',
+    description:
+      'قطعتين (ليقنز + تيشيرت) طقم مريح وعصري يمنحك حرية الحركة أثناء التمرين، بخامة ناعمة تمتص العرق وتناسب جميع الأنشطة الرياضية.',
+    price: 100,
+    category: 'clothing',
+    imageUrl: '',
+    variants: [{ name: 'المقاس', options: ['S', 'M', 'L', 'XL'] }],
+    accent: 'from-purple-500 via-fuchsia-500 to-rose-400',
+  },
+  {
+    id: '3',
+    slug: 'headband',
+    name: 'ربطة رأس',
+    description: 'ربطة رأس أنيقة تثبت الشعر وتمنع التعرق من الإزعاج، مثالية للتمارين اليومية.',
+    price: 12,
+    category: 'accessories',
+    variants: [{ name: 'اللون', options: ['رمادي', 'ابيض', 'بنفسجي', 'اسود'] }],
+    accent: 'from-slate-500 via-purple-500 to-pink-300',
+  },
+  {
+    id: '4',
+    slug: 'lunch-box',
+    name: 'لانش بوكس',
+    description: 'علبة طعام عملية وخفيفة تحافظ على وجبتك طازجة.',
+    price: 18,
+    category: 'home',
+    accent: 'from-pink-400 via-rose-500 to-purple-500',
+  },
+  {
+    id: '5',
+    slug: 'fitness-gloves',
+    name: 'قفازات رياضية',
+    description: 'قفازات مصممة لحماية اليدين وتوفير قبضة قوية أثناء التمارين، لراحة وأداء أفضل.',
+    price: 30,
+    category: 'accessories',
+    accent: 'from-fuchsia-500 via-purple-500 to-slate-700',
+  },
+  {
+    id: '6',
+    slug: 'jump-rope',
+    name: 'حبل القفز',
+    description: 'حبل قفز خفيف وسهل الاستخدام، مثالي لتمارين الكارديو وحرق السعرات في أي وقت.',
+    price: 39,
+    category: 'fitness',
+    accent: 'from-purple-400 via-pink-500 to-rose-400',
+  },
+  {
+    id: '7',
+    slug: 'sport-socks',
+    name: 'جوارب رياضية',
+    description: 'جوارب مريحة بخامة ناعمة ومرنة، توفر دعمًا للقدم وتناسب جميع أنواع التمارين.',
+    price: 20,
+    category: 'clothing',
+    variants: [{ name: 'اللون', options: ['وردي', 'ابيض', 'اسود', 'رمادي', 'بيج'] }],
+    accent: 'from-slate-500 via-pink-400 to-purple-500',
+  },
+  {
+    id: '8',
+    slug: 'resistance-belt',
+    name: 'حزام المقاومه',
+    description: 'حزام مرن وخفيف يساعد على تنويع التمارين وتقوية العضلات بسهولة في المنزل أو النادي.',
+    price: 15,
+    category: 'fitness',
+    accent: 'from-rose-500 via-purple-500 to-fuchsia-500',
+  },
+  {
+    id: '9',
+    slug: 'sports-bag',
+    name: 'حقيبة رياضية',
+    description: 'حقيبة عملية بتصميم مريح ومساحة مناسبة لحمل احتياجاتك الرياضية اليومية بكل ترتيب.',
+    price: 30,
+    category: 'bags',
+    accent: 'from-purple-700 via-slate-700 to-pink-500',
+  },
+  {
+    id: '10',
+    slug: 'smart-bottle',
+    name: 'زجاجة رياضية ذكية',
+    description:
+      'زجاجة أنيقة وعملية مزودة بشاشة رقمية لعرض درجة حرارة المشروب، تحافظ على مشروبك مناسبًا طوال اليوم وترافقك في النادي أو أثناء التنقل.',
+    price: 16,
+    category: 'accessories',
+    accent: 'from-fuchsia-400 via-purple-500 to-slate-700',
+  },
 ];
 
-export const bundleProductIds = ['1', '8', '6'];
+export const featuredProduct = products[0];
+export const bundleProductIds = ['1', '2', '6'];
+
+export const navLinks = [
+  { href: '/', label: 'الرئيسية' },
+  { href: '/products', label: 'المنتجات' },
+  { href: '/bundle', label: 'البوكس' },
+  { href: '/about', label: 'من نحن' },
+  { href: '/faq', label: 'الأسئلة الشائعة' },
+];
+
+export const footerLinks = [
+  { href: '/about', label: 'من نحن' },
+  { href: '/terms', label: 'الشروط والأحكام' },
+  { href: '/returns', label: 'سياسة الاسترجاع' },
+  { href: '/faq', label: 'الأسئلة الشائعة' },
+];
 
 export const saudiCities = [
   'الرياض',

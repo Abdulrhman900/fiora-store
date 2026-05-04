@@ -1,22 +1,11 @@
 import { notFound } from 'next/navigation';
-import AddToCartButton from '../../../components/AddToCartButton';
+import ProductDetailClient from '../../../components/ProductDetailClient';
 import { products } from '../../../lib/data';
+import type { Product } from '../../../lib/types';
 
 export default function ProductDetailsPage({ params }: { params: { id: string } }) {
-  const product = products.find((p) => p.id === params.id);
+  const product = products.find((entry: Product) => entry.id === params.id || entry.slug === params.id);
   if (!product) notFound();
 
-  return (
-    <section className="stack">
-      <h1>{product.name}</h1>
-      <article className="card">
-        <div className="card-emoji">{product.image}</div>
-        <p>{product.description}</p>
-        <div className="row">
-          <span className="price">{product.price} ر.س</span>
-          <AddToCartButton product={product} />
-        </div>
-      </article>
-    </section>
-  );
+  return <ProductDetailClient product={product} />;
 }

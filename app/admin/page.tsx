@@ -1,13 +1,55 @@
-import { products } from '../../lib/data';
+import { createSupabaseAdminClient } from '../../lib/supabase-admin';
+import { products as seedProducts } from '../../lib/data';
+import type { AdminStats } from '../../lib/types';
 
-export default function AdminHomePage() {
+async function getStats(): Promise<AdminStats> {
+  const supabase = createSupabaseAdminClient();
+  const [{ data: productRows }, { data: orderRows }] = await Promise.all([
+    supabase.from('products').select('id'),
+    supabase.from('orders').select('total_price'),
+  ]);
+
+  const totalProducts = productRows?.length || seedProducts.length;
+  const totalOrders = orderRows?.length || 0;
+  const totalSales = orderRows?.reduce((sum, order) => sum + Number(order.total_price || 0), 0) || 0;
+
+  return { totalSales, totalOrders, totalProducts };
+}
+
+export default async function AdminHomePage() {
+  const stats = await getStats();
+
   return (
     <section className="stack">
-      <h1>لوحة الإدارة</h1>
-      <article className="card">
-        <p>عدد المنتجات الحالية: {products.length}</p>
-        <p>يمكنك إدارة المنتجات والطلبات من القائمة الجانبية.</p>
-      </article>
+      <div>
+        <p className="eyebrow">نظرة عامة</p>
+        <h1 className="page-title">لوحة إدارة Fiora</h1>
+        <p className="page-copy">إدارة مباشرة للمنتجات والطلبات مع مؤشرات تشغيلية سريعة.</p>
+      </div>
+
+      <div className="stats-grid">
+        <article className="stat-card">
+          <span className="muted">إجمالي المبيعات</span>
+          <strong>{stats.totalSales} ر.س</strong>
+        </article>
+        <article className="stat-card">
+          <span className="muted">عدد الطلبات</span>
+          <strong>{stats.totalOrders}</strong>
+        </article>
+        <article className="stat-card">
+          <span className="muted">عدد المنتجات</span>
+          <strong>{stats.totalProducts}</strong>
+        </article>
+      </div>
+
+      <div className="dashboard-panel">
+        <div className="section-row">
+          <div>
+            <h2>أدوات سريعة</h2>
+            <p className="muted">أضيفي منتجات، راقبي الطلبات، وحدّثي الحالات من القائمة الجانبية.</p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

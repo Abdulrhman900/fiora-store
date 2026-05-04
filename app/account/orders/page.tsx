@@ -33,22 +33,30 @@ export default function OrdersPage() {
 
   return (
     <section className="stack">
-      <h1>طلباتي</h1>
+      <div>
+        <p className="eyebrow">طلباتي</p>
+        <h1 className="page-title">سجل الطلبات</h1>
+      </div>
+
       {orders.length === 0 ? (
-        <p>لا توجد طلبات بعد.</p>
+        <div className="empty-state">
+          <p>لا توجد طلبات بعد.</p>
+        </div>
       ) : (
-        orders.map((order) => (
-          <article className="card" key={order.id}>
-            <div className="row">
-              <strong>#{order.id.slice(0, 8)}</strong>
-              <span>{order.status}</span>
-            </div>
-            <div className="row">
-              <span>{order.total_price} ر.س</span>
-              <small>{order.created_at?.slice(0, 10)}</small>
-            </div>
-          </article>
-        ))
+        <div className="dashboard-list">
+          {orders.map((order) => (
+            <article className="dashboard-row" key={order.id}>
+              <div>
+                <strong>#{order.id.slice(0, 8)}</strong>
+                <div className="small">{order.created_at?.slice(0, 10)}</div>
+              </div>
+              <strong>{order.total_price} ر.س</strong>
+              <span className="status-badge">
+                {order.status === 'pending' ? 'قيد الانتظار' : order.status === 'shipped' ? 'تم الشحن' : 'مكتمل'}
+              </span>
+            </article>
+          ))}
+        </div>
       )}
     </section>
   );

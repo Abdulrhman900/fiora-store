@@ -1,24 +1,24 @@
-import Link from 'next/link';
-import AddToCartButton from '../../components/AddToCartButton';
+'use client';
+
+import { motion } from 'framer-motion';
+import ProductCard from '../../components/ProductCard';
 import { products } from '../../lib/data';
 
 export default function ProductsPage() {
   return (
     <section className="stack">
-      <h1>كل المنتجات</h1>
-      <p>تم العثور على {products.length} منتجاً.</p>
-      <div className="grid">
+      <motion.div className="section-row" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div>
+          <p className="eyebrow">المنتجات</p>
+          <h1 className="page-title">كل المنتجات في فيورا</h1>
+          <p className="page-copy">{products.length} منتجاً منتقى بعناية لتجربة تسوق نسائية أنيقة وسريعة.</p>
+        </div>
+        <span className="pill">مكتبة مرتبة</span>
+      </motion.div>
+
+      <div className="catalog-grid">
         {products.map((product) => (
-          <article className="card" key={product.id}>
-            <div className="card-emoji">{product.image}</div>
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-            <div className="row">
-              <span className="price">{product.price} ر.س</span>
-              <AddToCartButton product={product} />
-            </div>
-            <Link href={`/products/${product.id}`} className="btn secondary">عرض المنتج</Link>
-          </article>
+          <ProductCard product={product} key={product.id} />
         ))}
       </div>
     </section>

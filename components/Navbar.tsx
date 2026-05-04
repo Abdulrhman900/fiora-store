@@ -1,28 +1,42 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
+import { ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
-  const { itemCount } = useCart();
+  const { itemCount, openCart } = useCart();
 
   return (
     <header className="nav">
       <div className="container nav-inner">
         <nav className="nav-links" aria-label="Main">
-          <Link href="/">الرئيسية</Link>
-          <Link href="/products">المنتجات</Link>
-          <Link href="/bundle">الباقة</Link>
-          <Link href="/about">عن فيورا</Link>
-          <Link href="/contact">تواصل</Link>
-        </nav>
-        <div className="brand">FIORA</div>
-        <div className="nav-actions">
-          <Link href="/auth/login">دخول</Link>
-          <Link href="/cart" className="cart-link">
-            السلة
-            <span className="badge" aria-label="items in cart">{itemCount}</span>
+          <Link href="/" className="brand-link">
+            <Image src="/logo.png" alt="شعار فيورا" width={42} height={42} priority />
+            <span>
+              <strong>فيورا</strong>
+              <small>Women's Sports Gear</small>
+            </span>
           </Link>
+          <div className="nav-menu">
+            <Link href="/products">المنتجات</Link>
+            <Link href="/bundle">البوكس</Link>
+            <Link href="/about">من نحن</Link>
+            <Link href="/faq">الأسئلة الشائعة</Link>
+          </div>
+        </nav>
+        <div className="nav-actions">
+          <Link href="/auth/login" className="nav-pill">
+            تسجيل الدخول
+          </Link>
+          <button type="button" className="nav-pill cart-link" onClick={openCart}>
+            <ShoppingBag size={16} />
+            <span>السلة</span>
+            <span className="badge" aria-label="items in cart">
+              {itemCount}
+            </span>
+          </button>
         </div>
       </div>
     </header>

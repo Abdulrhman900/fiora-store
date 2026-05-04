@@ -5,12 +5,15 @@ import type { CartItem, Product } from '../lib/types';
 
 type CartContextValue = {
   items: CartItem[];
-  addItem: (product: Product, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addItem: (product: Product, quantity?: number, variantLabel?: string) => void;
+  removeItem: (productId: string, variantLabel?: string) => void;
+  updateQuantity: (productId: string, quantity: number, variantLabel?: string) => void;
   clearCart: () => void;
   totalPrice: number;
   itemCount: number;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -19,6 +22,7 @@ const STORAGE_KEY = 'fiora_cart';
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -38,26 +42,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }, [items, hydrated]);
 
-  const addItem = (product: Product, quantity = 1) => {
+  const addItem = (product: Product, quantity = 1, variantLabel = '') => {
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item.id === product.id && (item.variantLabel || '') === variantLabel);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+          item.id === product.id && (item.variantLabel || '') === variantLabel
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         );
       }
-      return [...prev, { ...product, quantity }];
+      return [...prev, { ...product, quantity, variantLabel }];
     });
+    setIsCartOpen(true);
   };
 
-  const removeItem = (productId: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== productId));
+  const removeItem = (productId: string, variantLabel = '') => {
+    setItems((prev) => prev.filter((item) => !(item.id === productId && (item.variantLabel || '') === variantLabel)));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number, variantLabel = '') => {
     setItems((prev) =>
       prev
-        .map((item) => (item.id === productId ? { ...item, quantity: Math.max(1, quantity) } : item))
+        .map((item) =>
+          item.id === productId && (item.variantLabel || '') === variantLabel
+            ? { ...item, quantity: Math.max(1, quantity) }
+            : item
+        )
         .filter((item) => item.quantity > 0)
     );
   };
@@ -78,7 +89,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalPrice, itemCount }}
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+        totalPrice,
+        itemCount,
+        isCartOpen,
+        openCart: () => setIsCartOpen(true),
+        closeCart: () => setIsCartOpen(false),
+      }}
     >
       {children}
     </CartContext.Provider>

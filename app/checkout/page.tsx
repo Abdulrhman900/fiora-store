@@ -2,6 +2,7 @@
 
 import { FormEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { saudiCities } from '../../lib/data';
 import { supabase } from '../../lib/supabase';
@@ -30,7 +31,7 @@ export default function CheckoutPage() {
     setError('');
 
     if (items.length === 0) {
-      setError('السلة فارغة. أضف منتجات أولاً.');
+      setError('السلة فارغة. أضيفي منتجات أولاً.');
       return;
     }
 
@@ -69,89 +70,73 @@ export default function CheckoutPage() {
   };
 
   return (
-    <section className="stack">
-      <h1>الدفع</h1>
-      <form className="card stack" onSubmit={submit}>
+    <section className="hero-shell auth-shell">
+      <div className="hero-copy">
+        <p className="eyebrow">الدفع</p>
+        <h1 className="page-title">إتمام الطلب</h1>
+        <p className="page-copy">أدخلي تفاصيل الشحن والدفع، ثم أكدي طلبك ليصل مباشرة إلى قاعدة بيانات Supabase.</p>
+        <div className="checkout-summary">
+          {items.map((item) => (
+            <div key={`${item.id}-${item.variantLabel || 'default'}`} className="row">
+              <span>{item.name}</span>
+              <strong>{item.price * item.quantity} ر.س</strong>
+            </div>
+          ))}
+          <div className="total-row">
+            <strong>المجموع</strong>
+            <strong>{totalPrice} ر.س</strong>
+          </div>
+        </div>
+      </div>
+
+      <motion.form className="dashboard-panel product-form" onSubmit={submit} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}>
         <div className="form-grid">
-          <label>
-            الاسم الكامل
-            <input
-              className="input"
-              value={form.fullName}
-              onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
-              required
-            />
+          <label className="stack">
+            <span>الاسم الكامل</span>
+            <input className="input" value={form.fullName} onChange={(e) => setForm((current) => ({ ...current, fullName: e.target.value }))} required />
           </label>
-          <label>
-            رقم الجوال
-            <input
-              className="input"
-              value={form.phone}
-              onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-              placeholder="05xxxxxxxx"
-              required
-            />
+          <label className="stack">
+            <span>رقم الجوال</span>
+            <input className="input" value={form.phone} onChange={(e) => setForm((current) => ({ ...current, phone: e.target.value }))} placeholder="05xxxxxxxx" required />
           </label>
         </div>
 
         <div className="form-grid">
-          <label>
-            المدينة
-            <select
-              className="select"
-              value={form.city}
-              onChange={(e) => setForm((p) => ({ ...p, city: e.target.value }))}
-            >
+          <label className="stack">
+            <span>المدينة</span>
+            <select className="select" value={form.city} onChange={(e) => setForm((current) => ({ ...current, city: e.target.value }))}>
               {saudiCities.map((city) => (
-                <option key={city} value={city}>{city}</option>
+                <option key={city} value={city}>
+                  {city}
+                </option>
               ))}
             </select>
           </label>
-          <label>
-            طريقة الدفع
-            <select
-              className="select"
-              value={form.paymentMethod}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, paymentMethod: e.target.value as CheckoutForm['paymentMethod'] }))
-              }
-            >
+          <label className="stack">
+            <span>طريقة الدفع</span>
+            <select className="select" value={form.paymentMethod} onChange={(e) => setForm((current) => ({ ...current, paymentMethod: e.target.value as CheckoutForm['paymentMethod'] }))}>
               <option value="cod">الدفع عند الاستلام</option>
-              <option value="card">بطاقة مدى / فيزا</option>
+              <option value="card">بطاقة مدى / Visa</option>
             </select>
           </label>
         </div>
 
-        <label>
-          العنوان التفصيلي
-          <textarea
-            className="textarea"
-            rows={3}
-            value={form.address}
-            onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))}
-            required
-          />
+        <label className="stack">
+          <span>العنوان التفصيلي</span>
+          <textarea className="textarea" rows={4} value={form.address} onChange={(e) => setForm((current) => ({ ...current, address: e.target.value }))} required />
         </label>
 
-        <label>
-          ملاحظات الطلب
-          <textarea
-            className="textarea"
-            rows={3}
-            value={form.notes}
-            onChange={(e) => setForm((p) => ({ ...p, notes: e.target.value }))}
-          />
+        <label className="stack">
+          <span>ملاحظات الطلب</span>
+          <textarea className="textarea" rows={3} value={form.notes} onChange={(e) => setForm((current) => ({ ...current, notes: e.target.value }))} />
         </label>
 
-        <div className="row">
-          <strong>الإجمالي: {totalPrice} ر.س</strong>
-          <button className="btn" type="submit" disabled={loading}>
-            {loading ? 'جارٍ تنفيذ الطلب...' : 'تأكيد الطلب'}
-          </button>
-        </div>
-        {!isPhoneValid && form.phone && <p>تحقق من رقم الجوال: يجب أن يبدأ بـ 05 ويكون 10 أرقام.</p>}
-        {error && <p>{error}</p>}
-      </form>
+        <button className="btn" type="submit" disabled={loading}>
+          {loading ? 'جارٍ تأكيد الطلب...' : 'تأكيد الطلب'}
+        </button>
+        {!isPhoneValid && form.phone ? <p className="muted">رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.</p> : null}
+        {error ? <p className="muted">{error}</p> : null}
+      </motion.form>
     </section>
   );
 }

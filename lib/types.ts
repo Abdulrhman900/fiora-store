@@ -1,14 +1,25 @@
 export type Product = {
   id: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
-  image: string;
+  image?: string;
+  imageUrl?: string;
   category: string;
+  featured?: boolean;
+  variants?: ProductVariant[];
+  accent?: string;
+};
+
+export type ProductVariant = {
+  name: string;
+  options: string[];
 };
 
 export type CartItem = Product & {
   quantity: number;
+  variantLabel?: string;
 };
 
 export type Profile = {
@@ -17,7 +28,7 @@ export type Profile = {
   role: 'customer' | 'admin';
 };
 
-export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus = 'pending' | 'shipped' | 'completed';
 
 export type CheckoutForm = {
   fullName: string;
@@ -39,4 +50,10 @@ export type OrderInsert = {
   items: CartItem[];
   total_price: number;
   status: OrderStatus;
+};
+
+export type AdminStats = {
+  totalSales: number;
+  totalOrders: number;
+  totalProducts: number;
 };
