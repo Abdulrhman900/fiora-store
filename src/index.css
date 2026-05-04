@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-tajawal: "Tajawal", sans-serif;
+  --color-gold: #c9a96e;
+  --color-gold-hover: #b8985d;
+  --color-ink: #1a1a1a;
+  --color-cream: #f7f3ed;
+}
+
+@layer base {
+  body {
+    @apply bg-cream text-ink font-tajawal antialiased;
+  }
+}
+
+@layer components {
+  .product-card {
+    perspective: 800px;
+    transition: transform 0.4s ease;
+  }
+  
+  .product-card:hover {
+    transform: perspective(800px) rotateY(-5deg) scale(1.02);
+  }
+
+  .nav-blur {
+    @apply bg-white/50 backdrop-blur-md;
+  }
+}
