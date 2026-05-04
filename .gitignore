@@ -8,3 +8,5 @@ coverage/
 tsconfig.tsbuildinfo
 .env*
 !.env.example
+
+.vercel
