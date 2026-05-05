@@ -6,6 +6,7 @@ export type Product = {
   price: number;
   image?: string;
   imageUrl?: string;
+  image_url?: string | null;
   category: string;
   featured?: boolean;
   variants?: ProductVariant[];
