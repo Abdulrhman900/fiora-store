@@ -12,14 +12,14 @@ export default function HomePage() {
       <motion.section className="hero-shell" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
         <div className="hero-copy">
           <p className="eyebrow">Fiora | Women's Sports Gear</p>
-          <h1>بوكس البداية الرياضية ✨</h1>
+          <h1>البوكس الرياضي ✨</h1>
           <p className="page-copy">
-            كل احتياجاتك الرياضية في بوكس واحد أنيق ومتكامل، يجمع بين الراحة والعملية ليكون خيارك المثالي لبدء أو تطوير روتينك الرياضي بكل سهولة.
+            اكتشفي قوتك مع تشكيلتنا الحصرية. أدوات رياضية وملابس مصممة خصيصاً للمرأة العصرية لتمنحك الأناقة والراحة في كل تمرين.
           </p>
           <div className="hero-badges">
             <span className="pill">279 SAR</span>
-            <span className="pill">تجربة فخمة</span>
-            <span className="pill">RTL عربي</span>
+            <span className="pill">الأعلى مبيعاً</span>
+            <span className="pill">متكامل وعملي</span>
           </div>
           <div className="hero-actions">
             <AddToCartButton product={featuredProduct} className="btn" />
@@ -29,16 +29,16 @@ export default function HomePage() {
           </div>
           <div className="feature-list">
             <div className="feature-card">
-              <strong>تجربة سلة عصرية</strong>
-              <span className="muted">Slide-over cart مع إضافة فورية.</span>
+              <strong>جودة فائقة</strong>
+              <span className="muted">خامات قوية ومريحة صُممت لتدوم طويلاً.</span>
             </div>
             <div className="feature-card">
-              <strong>منتجات مختارة</strong>
-              <span className="muted">11 منتجاً مطابقاً لقائمة السِيد.</span>
+              <strong>أناقة استثنائية</strong>
+              <span className="muted">تصاميم عصرية تناسب ذوقك وتبرز جمالك.</span>
             </div>
             <div className="feature-card">
-              <strong>دفع وإدارة</strong>
-              <span className="muted">Supabase + لوحة تحكم إدارية واقعية.</span>
+              <strong>رحلة متكاملة</strong>
+              <span className="muted">كل ما تحتاجينه في صندوق واحد لبداية مثالية.</span>
             </div>
           </div>
         </div>
@@ -52,8 +52,12 @@ export default function HomePage() {
                 <span className="chip">منتج مميز</span>
                 <span className="chip">الأكثر طلباً</span>
               </div>
-              <div className="hero-box-visual">
-                <div className="hero-box-fallback">✨</div>
+              <div className="hero-box-visual" style={{ overflow: 'hidden' }}>
+                {featuredProduct.imageUrl ? (
+                  <img src={featuredProduct.imageUrl} alt={featuredProduct.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <div className="hero-box-fallback">✨</div>
+                )}
               </div>
               <div className="stack">
                 <strong>{featuredProduct.name}</strong>

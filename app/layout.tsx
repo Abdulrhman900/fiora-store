@@ -8,7 +8,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: "Fiora | فيورا - Women's Sports Gear",
-  description: 'متجر نسائي عربي RTL للأدوات والملابس الرياضية بتجربة سلة ودفع حديثة.',
+  description: 'متجر فيورا للأدوات والملابس الرياضية النسائية، خيارك الأول لأناقة ورياضة مستدامة.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

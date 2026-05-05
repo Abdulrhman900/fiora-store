@@ -11,11 +11,11 @@ export default function AboutPage() {
       <div className="dashboard-panel">
         <div className="feature-card">
           <strong>رؤية واضحة</strong>
-          <span className="muted">منتجات مختارة بعناية للرياضة اليومية.</span>
+          <span className="muted">منتجات مختارة بعناية للرياضة المتوازنة.</span>
         </div>
         <div className="feature-card">
-          <strong>تجربة عربية</strong>
-          <span className="muted">RTL كامل ونصوص عربية في كل الواجهات.</span>
+          <strong>تجربة فاخرة</strong>
+          <span className="muted">رفاهيتك وراحتك هي دائمًا أولويتنا في كل التفاصيل.</span>
         </div>
       </div>
     </section>

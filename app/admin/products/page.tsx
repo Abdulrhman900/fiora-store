@@ -79,13 +79,39 @@ export default function AdminProductsPage() {
 
   const handleFile = async (file?: File | null) => {
     if (!file) return;
+    
+    // Show local preview immediately
     const reader = new FileReader();
     reader.onload = () => {
-      const result = String(reader.result || '');
-      setPreview(result);
-      setForm((current) => ({ ...current, imageUrl: result }));
+      setPreview(String(reader.result || ''));
     };
     reader.readAsDataURL(file);
+
+    try {
+      setLoading(true);
+      const { supabase } = await import('../../../lib/supabase');
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `images/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('products')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data } = supabase.storage
+        .from('products')
+        .getPublicUrl(filePath);
+
+      setForm((current) => ({ ...current, imageUrl: data.publicUrl }));
+    } catch (err) {
+      alert('خطأ في رفع الصورة: ' + (err instanceof Error ? err.message : 'يرجى التأكد من إعدادات Storage'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
