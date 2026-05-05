@@ -83,7 +83,7 @@ export default function HomePage() {
               </div>
               <div className="hero-box-visual" style={{ overflow: 'hidden' }}>
                 {heroItem.imageUrl || heroItem.image_url ? (
-                  <img src={heroItem.imageUrl || heroItem.image_url} alt={heroItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={heroItem.imageUrl || heroItem.image_url || undefined} alt={heroItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <div className="hero-box-fallback">✨</div>
                 )}
