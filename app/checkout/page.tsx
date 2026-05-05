@@ -52,31 +52,31 @@ export default function CheckoutPage() {
       setLoading(true);
       setProcessingPayment(true);
       
-      setTimeout(async () => {
-        // Attempt Supabase insert but don't fail if it bombs (simulate success)
-        try {
-          const { data: userData } = await supabase.auth.getUser();
-          const payload: OrderInsert = {
-            user_id: userData?.user?.id,
-            customer_name: form.fullName,
-            phone: form.phone,
-            city: form.city,
-            address: form.address,
-            payment_method: form.paymentMethod === 'cod' ? 'cod' : 'card',
-            notes: form.notes,
-            items,
-            total_price: totalPrice,
-            status: 'pending',
-          };
-          await supabase.from('orders').insert(payload);
-        } catch (insertError) {
-          console.warn('Supabase DB insert ignored in simulation mode.', insertError)
-        }
+      // Wait EXACTLY 5 seconds (5000ms) BEFORE executing DB insertion
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      
+      const { data: userData } = await supabase.auth.getUser();
+      const payload: OrderInsert = {
+        user_id: userData?.user?.id,
+        customer_name: form.fullName,
+        phone: form.phone,
+        city: form.city,
+        address: form.mapPinned ? `${form.address} [Map Lat/Lng Saved]` : form.address,
+        payment_method: form.paymentMethod === 'cod' ? 'cod' : 'card',
+        notes: `طريقة الدفع المختارة: ${form.paymentMethod} | ${form.notes}`,
+        items,
+        total_price: totalPrice,
+        status: 'pending',
+      };
+      
+      const { error: insertError } = await supabase.from('orders').insert(payload);
+      if (insertError) {
+        throw insertError;
+      }
 
-        clearCart();
-        setProcessingPayment(false);
-        router.push('/checkout/success');
-      }, 5000); // exactly 5000ms delay for simulation
+      clearCart();
+      setProcessingPayment(false);
+      router.push('/checkout/success');
 
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'فشل إنشاء الطلب.';

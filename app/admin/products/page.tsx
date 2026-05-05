@@ -118,9 +118,15 @@ export default function AdminProductsPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      // Map imageUrl to image_url for database compatibility
       const payload = {
-        ...form,
+        name: form.name,
         slug: form.slug || toSlug(form.name),
+        description: form.description,
+        price: form.price,
+        category: form.category,
+        featured: form.featured,
+        image_url: form.imageUrl,
         variants: parseVariants(form.variantsText),
       };
       const response = await fetch(editingId ? `/api/admin/products/${editingId}` : '/api/admin/products', {
@@ -130,7 +136,12 @@ export default function AdminProductsPage() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'تعذر حفظ المنتج');
-      const saved: Product = data.product;
+      
+      const saved: Product = {
+        ...data.product,
+        imageUrl: data.product.image_url || data.product.imageUrl
+      };
+      
       setProducts((current) =>
         editingId ? current.map((item) => (item.id === saved.id ? saved : item)) : [saved, ...current]
       );
