@@ -52,31 +52,31 @@ export default function CheckoutPage() {
       setLoading(true);
       setProcessingPayment(true);
       
-      // Attempt Supabase insert but don't fail if it bombs (simulate success)
-      try {
-        const { data: userData } = await supabase.auth.getUser();
-        const payload: OrderInsert = {
-          user_id: userData?.user?.id,
-          customer_name: form.fullName,
-          phone: form.phone,
-          city: form.city,
-          address: form.address,
-          payment_method: form.paymentMethod === 'cod' ? 'cod' : 'card',
-          notes: form.notes,
-          items,
-          total_price: totalPrice,
-          status: 'pending',
-        };
-        await supabase.from('orders').insert(payload);
-      } catch (insertError) {
-        console.warn('Supabase DB insert ignored in simulation mode.', insertError)
-      }
+      setTimeout(async () => {
+        // Attempt Supabase insert but don't fail if it bombs (simulate success)
+        try {
+          const { data: userData } = await supabase.auth.getUser();
+          const payload: OrderInsert = {
+            user_id: userData?.user?.id,
+            customer_name: form.fullName,
+            phone: form.phone,
+            city: form.city,
+            address: form.address,
+            payment_method: form.paymentMethod === 'cod' ? 'cod' : 'card',
+            notes: form.notes,
+            items,
+            total_price: totalPrice,
+            status: 'pending',
+          };
+          await supabase.from('orders').insert(payload);
+        } catch (insertError) {
+          console.warn('Supabase DB insert ignored in simulation mode.', insertError)
+        }
 
-      setTimeout(() => {
         clearCart();
         setProcessingPayment(false);
         router.push('/checkout/success');
-      }, 4000); // 4 seconds delay for simulation
+      }, 5000); // exactly 5000ms delay for simulation
 
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'فشل إنشاء الطلب.';
@@ -160,12 +160,27 @@ export default function CheckoutPage() {
 
           <div className="stack" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
             <span>موقع التوصيل (الخريطة)</span>
-            <div style={{ height: '150px', background: '#e9ecef', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: form.mapPinned ? '2px solid #10b981' : '1px dashed #ccc' }}>
-              {form.mapPinned ? (
-                <span style={{ color: '#10b981', fontWeight: 'bold' }}>📍 تم اختيار الموقع بنجاح</span>
-              ) : (
-                <button type="button" onClick={handleMapPin} style={{ padding: '8px 16px', background: '#3b82f6', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer' }}>اضغطي لتحديد الموقع</button>
-              )}
+            <div style={{ height: '300px', position: 'relative', background: '#e9ecef', borderRadius: '8px', overflow: 'hidden', border: form.mapPinned ? '2px solid #10b981' : '1px solid #ccc' }}>
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d463877.3124237194!2d46.93290680675276!3d24.725455365518274!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2bRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0, opacity: form.mapPinned ? 0.7 : 1 }} 
+                allowFullScreen={false} 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: form.mapPinned ? 'rgba(255,255,255,0.4)' : 'transparent', pointerEvents: 'none' }}>
+                {form.mapPinned ? (
+                  <div style={{ background: '#10b981', color: 'white', padding: '10px 20px', borderRadius: '20px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                    📍 تم تثبيت الموقع
+                  </div>
+                ) : (
+                  <button type="button" onClick={handleMapPin} style={{ pointerEvents: 'auto', padding: '12px 24px', background: '#e11d48', color: 'white', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', transform: 'translateY(-20px)' }}>
+                    📍 اضغط هنا لتحديد موقعك
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
