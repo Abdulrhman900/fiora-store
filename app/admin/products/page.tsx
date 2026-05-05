@@ -53,6 +53,7 @@ function parseVariants(text: string) {
 }
 
 export default function AdminProductsPage() {
+  const router = require('next/navigation').useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [preview, setPreview] = useState<string>('');
@@ -75,43 +76,6 @@ export default function AdminProductsPage() {
     setEditingId(null);
     setPreview('');
     setForm({ ...initialProduct, variantsText: '' });
-  };
-
-  const handleFile = async (file?: File | null) => {
-    if (!file) return;
-    
-    // Show local preview immediately
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreview(String(reader.result || ''));
-    };
-    reader.readAsDataURL(file);
-
-    try {
-      setLoading(true);
-      const { supabase } = await import('../../../lib/supabase');
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `images/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('products')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      const { data } = supabase.storage
-        .from('products')
-        .getPublicUrl(filePath);
-
-      setForm((current) => ({ ...current, imageUrl: data.publicUrl }));
-    } catch (err) {
-      alert('خطأ في رفع الصورة: ' + (err instanceof Error ? err.message : 'يرجى التأكد من إعدادات Storage'));
-    } finally {
-      setLoading(false);
-    }
   };
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
@@ -143,8 +107,9 @@ export default function AdminProductsPage() {
       };
       
       setProducts((current) =>
-        editingId ? current.map((item) => (item.id === saved.id ? saved : item)) : [saved, ...current]
+        editingId ? current.map((item) => (item.id === editingId ? saved : item)) : [saved, ...current]
       );
+      router.refresh();
       resetForm();
     } catch (err) {
       alert(err instanceof Error ? err.message : 'تعذر حفظ المنتج');
@@ -215,13 +180,9 @@ export default function AdminProductsPage() {
           <textarea className="textarea" rows={4} value={form.description} onChange={(e) => setForm((current) => ({ ...current, description: e.target.value }))} required />
         </label>
 
-        <div className="form-grid">
+                <div className="form-grid">
           <label className="stack">
-            <span>صورة المنتج</span>
-            <input className="input" type="file" accept="image/*" onChange={(e) => void handleFile(e.target.files?.[0])} />
-          </label>
-          <label className="stack">
-            <span>أو رابط الصورة</span>
+            <span>���� ������ (���� ����: /images/...)</span>
             <input className="input" value={form.imageUrl} onChange={(e) => setForm((current) => ({ ...current, imageUrl: e.target.value }))} placeholder="https://..." />
           </label>
         </div>
@@ -293,3 +254,12 @@ export default function AdminProductsPage() {
     </section>
   );
 }
+
+
+
+
+
+
+
+
+
