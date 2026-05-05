@@ -61,7 +61,7 @@ export default function CheckoutPage() {
           phone: form.phone,
           city: form.city,
           address: form.address,
-          payment_method: form.paymentMethod,
+          payment_method: form.paymentMethod === 'cod' ? 'cod' : 'card',
           notes: form.notes,
           items,
           total_price: totalPrice,
