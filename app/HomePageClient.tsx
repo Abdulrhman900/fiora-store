@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ export default function HomePage({ products, featuredProduct }: { products: any[
     <div className="stack">
       <motion.section className="hero-shell" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
         <div className="hero-copy">
-          <p className="eyebrow">Fiora | Women's Sports Gear</p>
+          <p className="eyebrow">FLORA</p>
           <h1>البوكس الرياضي ✨</h1>
           <p className="page-copy">
             اكتشفي قوتك مع تشكيلتنا الحصرية. أدوات رياضية وملابس مصممة خصيصاً للمرأة العصرية لتمنحك الأناقة والراحة في كل تمرين.

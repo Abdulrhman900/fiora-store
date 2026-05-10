@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { motion } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
@@ -15,7 +15,7 @@ export default function BundlePage() {
     <section className="stack">
       <div className="hero-shell">
         <div className="hero-copy">
-          <p className="eyebrow">بوكس فيورا</p>
+          <p className="eyebrow">بوكس فلورا</p>
           <h1 className="page-title">البوكس الرياضي المخصص للبداية السريعة</h1>
           <p className="page-copy">احصلي على بوكس متناسق يجمع بين منتج البداية الرياضية مع أفضل الأدوات المساعدة.</p>
           <div className="hero-badges">

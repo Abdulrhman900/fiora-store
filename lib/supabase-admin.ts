@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+﻿import { createClient } from '@supabase/supabase-js';
 
 function getSafeSupabaseUrl() {
   const candidate = process.env.NEXT_PUBLIC_SUPABASE_URL;

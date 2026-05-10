@@ -1,4 +1,4 @@
-export default function ShippingPage() {
+﻿export default function ShippingPage() {
   return (
     <section className="stack">
       <p className="eyebrow">الشحن والتوصيل</p>

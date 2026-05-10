@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createSupabaseAdminClient } from '../../../../../lib/supabase-admin';
 
-const isAdmin = () => cookies().get('fiora_admin_bypass')?.value === '1';
+const isAdmin = () => cookies().get('FLORA_admin_bypass')?.value === '1';
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   if (!isAdmin()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

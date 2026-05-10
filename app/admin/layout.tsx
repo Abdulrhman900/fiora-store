@@ -1,10 +1,10 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '../../lib/supabase-server';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const bypass = cookies().get('fiora_admin_bypass')?.value === '1';
+  const bypass = cookies().get('FLORA_admin_bypass')?.value === '1';
 
   if (!bypass) {
     const supabase = createSupabaseServerClient();

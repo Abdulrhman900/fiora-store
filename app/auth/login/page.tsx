@@ -1,11 +1,11 @@
-'use client';
+﻿'use client';
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { supabase } from '../../../lib/supabase';
 
-const ADMIN_EMAIL = 'admin@fiora.com';
+const ADMIN_EMAIL = 'admin@FLORA.com';
 const ADMIN_PASSWORD = '123456';
 
 export default function LoginPage() {
@@ -21,7 +21,7 @@ export default function LoginPage() {
     const normalizedPassword = password.trim();
 
     if (normalizedEmail === ADMIN_EMAIL && normalizedPassword === ADMIN_PASSWORD) {
-      document.cookie = 'fiora_admin_bypass=1; path=/; max-age=2592000; samesite=lax';
+      document.cookie = 'FLORA_admin_bypass=1; path=/; max-age=2592000; samesite=lax';
       router.push('/admin');
       return;
     }
@@ -39,10 +39,10 @@ export default function LoginPage() {
     <section className="hero-shell auth-shell">
       <div className="hero-copy">
         <p className="eyebrow">تسجيل الدخول</p>
-        <h1 className="page-title">مرحباً بكِ في فيورا</h1>
+        <h1 className="page-title">مرحباً بكِ في فلورا</h1>
         <p className="page-copy">استخدمي بريدك وكلمة المرور أو بيانات الإدارة المخصصة للوصول السريع إلى لوحة التحكم.</p>
         <div className="hero-badges">
-          <span className="pill">admin@fiora.com / 123456</span>
+          <span className="pill">admin@FLORA.com / 123456</span>
           <span className="pill">Supabase Auth</span>
         </div>
       </div>

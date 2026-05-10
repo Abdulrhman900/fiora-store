@@ -1,4 +1,4 @@
-import { createSupabaseAdminClient } from '../../lib/supabase-admin';
+﻿import { createSupabaseAdminClient } from '../../lib/supabase-admin';
 import { products as seedProducts } from '../../lib/data';
 import type { AdminStats } from '../../lib/types';
 
@@ -23,7 +23,7 @@ export default async function AdminHomePage() {
     <section className="stack">
       <div>
         <p className="eyebrow">نظرة عامة</p>
-        <h1 className="page-title">لوحة إدارة Fiora</h1>
+        <h1 className="page-title">لوحة إدارة FLORA</h1>
         <p className="page-copy">إدارة مباشرة للمنتجات والطلبات مع مؤشرات تشغيلية سريعة.</p>
       </div>
 

@@ -1,4 +1,4 @@
-export default function ReturnsPage() {
+﻿export default function ReturnsPage() {
   return (
     <section className="stack">
       <p className="eyebrow">سياسة الاسترجاع</p>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,10 +13,9 @@ export default function Navbar() {
       <div className="container nav-inner">
         <nav className="nav-links" aria-label="Main">
           <Link href="/" className="brand-link">
-            <Image src="/logo.png" alt="شعار فيورا" width={42} height={42} priority />
+            <Image src="/logo.png" alt="شعار فلورا" width={42} height={42} priority />
             <span>
-              <strong>فيورا</strong>
-              <small>Women's Sports Gear</small>
+              <strong>فلورا</strong>
             </span>
           </Link>
           <div className="nav-menu">

@@ -1,4 +1,4 @@
-import type { Product } from './types';
+﻿import type { Product } from './types';
 
 export const socialLinks = {
   tiktok: 'https://www.tiktok.com/@mohammedalotaibi7632?_r=1&_t=ZS-965HMqPAGKu',
