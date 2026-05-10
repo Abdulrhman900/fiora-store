@@ -79,14 +79,7 @@ export const products: Product[] = [
     imageUrl: '/images/smart_bottle.jpg',
     accent: 'from-slate-500 via-pink-400 to-purple-500',
   }
-];
-    name: 'زجاجة رياضية ذكية',
-    description:
-      'زجاجة أنيقة وعملية مزودة بشاشة رقمية لعرض درجة حرارة المشروب، تحافظ على مشروبك مناسبًا طوال اليوم وترافقك في النادي أو أثناء التنقل.',
-    price: 16,
-    category: 'accessories',
-    accent: 'from-fuchsia-400 via-purple-500 to-slate-700',
-  },
+
 ];
 
 export const featuredProduct = products[0];
