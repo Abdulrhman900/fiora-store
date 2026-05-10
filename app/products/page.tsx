@@ -1,13 +1,26 @@
-import { createSupabaseServerClient } from '../../lib/supabase-server';
-import ProductsClient from './ProductsClient';
-import { products as staticProducts } from '../../lib/data';
+'use client';
 
-export const revalidate = 0;
+import { motion } from 'framer-motion';
+import ProductCard from '../../components/ProductCard';
+import { products } from '../../lib/data';
 
-export default async function ProductsRoute() {
-  const supabase = createSupabaseServerClient();
-  const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-  const products = data || staticProducts;
+export default function ProductsPage() {
+  return (
+    <section className="stack">
+      <motion.div className="section-row" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div>
+          <p className="eyebrow">المنتجات</p>
+          <h1 className="page-title">كل المنتجات في فيورا</h1>
+          <p className="page-copy">{products.length} منتجاً منتقى بعناية لتجربة تسوق نسائية أنيقة وسريعة.</p>
+        </div>
+        <span className="pill">مكتبة مرتبة</span>
+      </motion.div>
 
-  return <ProductsClient products={products} />;
+      <div className="catalog-grid">
+        {products.map((product) => (
+          <ProductCard product={product} key={product.id} />
+        ))}
+      </div>
+    </section>
+  );
 }

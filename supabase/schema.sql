@@ -111,4 +111,3 @@ on conflict (id) do update set
 insert into public.profiles (id, full_name, role)
 values ('00000000-0000-0000-0000-000000000001', 'Admin Seed', 'admin')
 on conflict (id) do update set full_name = excluded.full_name, role = excluded.role;
-

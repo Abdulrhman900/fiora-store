@@ -53,7 +53,6 @@ function parseVariants(text: string) {
 }
 
 export default function AdminProductsPage() {
-  const router = require('next/navigation').useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [preview, setPreview] = useState<string>('');
@@ -78,19 +77,24 @@ export default function AdminProductsPage() {
     setForm({ ...initialProduct, variantsText: '' });
   };
 
+  const handleFile = async (file?: File | null) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || '');
+      setPreview(result);
+      setForm((current) => ({ ...current, imageUrl: result }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Map imageUrl to image_url for database compatibility
       const payload = {
-        name: form.name,
+        ...form,
         slug: form.slug || toSlug(form.name),
-        description: form.description,
-        price: form.price,
-        category: form.category,
-        featured: form.featured,
-        image_url: form.imageUrl,
         variants: parseVariants(form.variantsText),
       };
       const response = await fetch(editingId ? `/api/admin/products/${editingId}` : '/api/admin/products', {
@@ -100,16 +104,10 @@ export default function AdminProductsPage() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'تعذر حفظ المنتج');
-      
-      const saved: Product = {
-        ...data.product,
-        imageUrl: data.product.image_url || data.product.imageUrl
-      };
-      
+      const saved: Product = data.product;
       setProducts((current) =>
-        editingId ? current.map((item) => (item.id === editingId ? saved : item)) : [saved, ...current]
+        editingId ? current.map((item) => (item.id === saved.id ? saved : item)) : [saved, ...current]
       );
-      router.refresh();
       resetForm();
     } catch (err) {
       alert(err instanceof Error ? err.message : 'تعذر حفظ المنتج');
@@ -180,9 +178,13 @@ export default function AdminProductsPage() {
           <textarea className="textarea" rows={4} value={form.description} onChange={(e) => setForm((current) => ({ ...current, description: e.target.value }))} required />
         </label>
 
-                <div className="form-grid">
+        <div className="form-grid">
           <label className="stack">
-            <span>���� ������ (���� ����: /images/...)</span>
+            <span>صورة المنتج</span>
+            <input className="input" type="file" accept="image/*" onChange={(e) => void handleFile(e.target.files?.[0])} />
+          </label>
+          <label className="stack">
+            <span>أو رابط الصورة</span>
             <input className="input" value={form.imageUrl} onChange={(e) => setForm((current) => ({ ...current, imageUrl: e.target.value }))} placeholder="https://..." />
           </label>
         </div>
@@ -254,12 +256,3 @@ export default function AdminProductsPage() {
     </section>
   );
 }
-
-
-
-
-
-
-
-
-

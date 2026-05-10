@@ -34,7 +34,6 @@ export default function Footer() {
         <div className="footer-links">
           <h4>تواصل</h4>
           <Link href="/contact">دعم العملاء</Link>
-          <Link href="/contact">واتساب: +966 50 062 0321</Link>
           <Link href="/shipping">الشحن والتوصيل</Link>
         </div>
       </div>
