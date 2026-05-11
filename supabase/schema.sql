@@ -28,7 +28,7 @@ create table if not exists public.orders (
   phone text not null,
   city text not null,
   address text not null,
-  payment_method text not null check (payment_method in ('cod', 'card')),
+  payment_method text not null check (payment_method in ('mada', 'visa', 'tabby', 'tamara')),
   notes text not null default '',
   items jsonb not null,
   total_price numeric not null,
@@ -95,7 +95,6 @@ insert into public.products (id, slug, name, description, price, category, image
 ('6', 'jump-rope', 'حبل القفز', 'حبل قفز خفيف وسهل الاستخدام، مثالي لتمارين الكارديو وحرق السعرات في أي وقت.', 39, 'fitness', null, null, false, '[]'::jsonb),
 ('7', 'sport-socks', 'جوارب رياضية', 'جوارب مريحة بخامة ناعمة ومرنة، توفر دعمًا للقدم وتناسب جميع أنواع التمارين.', 20, 'clothing', null, null, false, '[{"name":"اللون","options":["وردي","ابيض","اسود","رمادي","بيج"]}]'::jsonb),
 ('8', 'resistance-belt', 'حزام المقاومه', 'حزام مرن وخفيف يساعد على تنويع التمارين وتقوية العضلات بسهولة في المنزل أو النادي.', 15, 'fitness', null, null, false, '[]'::jsonb),
-('9', 'sports-bag', 'حقيبة رياضية', 'حقيبة عملية بتصميم مريح ومساحة مناسبة لحمل احتياجاتك الرياضية اليومية بكل ترتيب.', 30, 'bags', null, null, false, '[]'::jsonb),
 ('10', 'smart-bottle', 'زجاجة رياضية ذكية', 'زجاجة أنيقة وعملية مزودة بشاشة رقمية لعرض درجة حرارة المشروب، تحافظ على مشروبك مناسبًا طوال اليوم وترافقك في النادي أو أثناء التنقل.', 16, 'accessories', null, null, false, '[]'::jsonb)
 on conflict (id) do update set
   slug = excluded.slug,

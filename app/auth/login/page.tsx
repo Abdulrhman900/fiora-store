@@ -5,8 +5,14 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { supabase } from '../../../lib/supabase';
 
-const ADMIN_EMAIL = 'admin@FLORA.com';
+const ADMIN_EMAIL = 'admin@flora.com';
 const ADMIN_PASSWORD = '123456';
+
+const hasSupabaseConfig =
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) &&
+  process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://example.supabase.co' &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY !== 'public-anon-key';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,6 +32,11 @@ export default function LoginPage() {
       return;
     }
 
+    if (!hasSupabaseConfig) {
+      setError('تسجيل العملاء غير متاح حالياً. يمكن استخدام دخول الأدمن فقط حتى يتم ربط Supabase.');
+      return;
+    }
+
     const { error: loginError } = await supabase.auth.signInWithPassword({ email, password: normalizedPassword });
     if (loginError) {
       setError(loginError.message);
@@ -39,10 +50,10 @@ export default function LoginPage() {
     <section className="hero-shell auth-shell">
       <div className="hero-copy">
         <p className="eyebrow">تسجيل الدخول</p>
-        <h1 className="page-title">مرحباً بكِ في فلورا</h1>
+        <h1 className="page-title">مرحباً بكِ في FLORA</h1>
         <p className="page-copy">استخدمي بريدك وكلمة المرور أو بيانات الإدارة المخصصة للوصول السريع إلى لوحة التحكم.</p>
         <div className="hero-badges">
-          <span className="pill">admin@FLORA.com / 123456</span>
+          <span className="pill">admin@flora.com / 123456</span>
           <span className="pill">Supabase Auth</span>
         </div>
       </div>

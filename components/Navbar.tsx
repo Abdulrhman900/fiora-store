@@ -13,9 +13,9 @@ export default function Navbar() {
       <div className="container nav-inner">
         <nav className="nav-links" aria-label="Main">
           <Link href="/" className="brand-link">
-            <Image src="/logo.png" alt="شعار فلورا" width={42} height={42} priority />
+            <Image src="/logo.png" alt="شعار FLORA" width={42} height={42} priority />
             <span>
-              <strong>فلورا</strong>
+              <strong>FLORA</strong>
             </span>
           </Link>
           <div className="nav-menu">

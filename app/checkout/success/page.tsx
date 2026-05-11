@@ -6,7 +6,7 @@ export default function CheckoutSuccessPage() {
       <div className="hero-copy">
         <p className="eyebrow">تم بنجاح</p>
         <h1 className="page-title">تم استلام طلبك</h1>
-        <p className="page-copy">شكراً لثقتك في فلورا. سنبدأ تجهيز الطلب فوراً وإرسال التحديثات لك.</p>
+        <p className="page-copy">شكراً لثقتك في FLORA. سنبدأ تجهيز الطلب فوراً وإرسال التحديثات لك.</p>
         <Link href="/" className="btn">
           العودة للرئيسية
         </Link>

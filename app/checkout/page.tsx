@@ -2,27 +2,38 @@
 
 import { FormEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { saudiCities } from '../../lib/data';
 import { supabase } from '../../lib/supabase';
 import type { CheckoutForm, OrderInsert } from '../../lib/types';
 
-const initialForm: CheckoutForm = {
+type CheckoutState = CheckoutForm & {
+  mapPinned: boolean;
+};
+
+const initialForm: CheckoutState = {
   fullName: '',
   phone: '',
   city: 'الرياض',
-  address: '',
-  paymentMethod: 'cod',
+  paymentMethod: 'mada',
   notes: '',
+  mapPinned: false,
 };
+
+const paymentMethods = [
+  { id: 'mada', label: 'مدى' },
+  { id: 'visa', label: 'فيزا' },
+  { id: 'tabby', label: 'تابي' },
+  { id: 'tamara', label: 'تمارا' },
+] as const;
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
-  const [form, setForm] = useState<CheckoutForm>(initialForm);
+  const [form, setForm] = useState(initialForm);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [deliveryLocation] = useState('الرياض (24.7136, 46.6753)');
 
   const isPhoneValid = useMemo(() => /^05\d{8}$/.test(form.phone), [form.phone]);
 
@@ -40,17 +51,22 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (!form.mapPinned) {
+      setError('يرجى تحديد موقع التوصيل على الخريطة أولاً.');
+      return;
+    }
+
     try {
       setLoading(true);
       const { data: userData } = await supabase.auth.getUser();
       const payload: OrderInsert = {
-        user_id: userData.user?.id,
+        user_id: userData?.user?.id,
         customer_name: form.fullName,
         phone: form.phone,
         city: form.city,
-        address: form.address,
+        address: `Map Pin: ${deliveryLocation}`,
         payment_method: form.paymentMethod,
-        notes: form.notes,
+        notes: `طريقة الدفع المختارة: ${form.paymentMethod} | ${form.notes}`,
         items,
         total_price: totalPrice,
         status: 'pending',
@@ -74,7 +90,7 @@ export default function CheckoutPage() {
       <div className="hero-copy">
         <p className="eyebrow">الدفع</p>
         <h1 className="page-title">إتمام الطلب</h1>
-        <p className="page-copy">أدخلي تفاصيل الشحن والدفع، ثم أكدي طلبك ليصل مباشرة إلى قاعدة بيانات Supabase.</p>
+        <p className="page-copy">أدخلي بياناتك واختاري MAP وهمي مع طريقة الدفع المناسبة.</p>
         <div className="checkout-summary">
           {items.map((item) => (
             <div key={`${item.id}-${item.variantLabel || 'default'}`} className="row">
@@ -89,7 +105,7 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      <motion.form className="dashboard-panel product-form" onSubmit={submit} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}>
+      <form className="dashboard-panel product-form" onSubmit={submit}>
         <div className="form-grid">
           <label className="stack">
             <span>الاسم الكامل</span>
@@ -112,31 +128,46 @@ export default function CheckoutPage() {
               ))}
             </select>
           </label>
-          <label className="stack">
-            <span>طريقة الدفع</span>
-            <select className="select" value={form.paymentMethod} onChange={(e) => setForm((current) => ({ ...current, paymentMethod: e.target.value as CheckoutForm['paymentMethod'] }))}>
-              <option value="cod">الدفع عند الاستلام</option>
-              <option value="card">بطاقة مدى / Visa</option>
-            </select>
-          </label>
         </div>
 
-        <label className="stack">
-          <span>العنوان التفصيلي</span>
-          <textarea className="textarea" rows={4} value={form.address} onChange={(e) => setForm((current) => ({ ...current, address: e.target.value }))} required />
-        </label>
+        <div className="stack" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+          <span>موقع التوصيل (MAP وهمي)</span>
+          <div style={{ height: '240px', position: 'relative', background: 'linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%)', borderRadius: '8px', overflow: 'hidden', border: form.mapPinned ? '2px solid #10b981' : '1px solid #ccc' }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px', opacity: 0.7 }} />
+            <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}>
+              <span style={{ fontSize: '2rem' }}>📍</span>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gap: '0.6rem', marginTop: '0.75rem' }}>
+            <input className="input" readOnly value={`📍 موقع التوصيل المحدد: ${deliveryLocation}`} />
+            <button type="button" className="btn-secondary" onClick={() => setForm((current) => ({ ...current, mapPinned: true }))}>
+              تأكيد الموقع
+            </button>
+          </div>
+        </div>
 
-        <label className="stack">
-          <span>ملاحظات الطلب</span>
-          <textarea className="textarea" rows={3} value={form.notes} onChange={(e) => setForm((current) => ({ ...current, notes: e.target.value }))} />
-        </label>
+        <div className="stack" style={{ marginBottom: '1.5rem' }}>
+          <span style={{ fontWeight: 600 }}>طريقة الدفع</span>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            {paymentMethods.map((method) => (
+              <button
+                key={method.id}
+                type="button"
+                onClick={() => setForm((current) => ({ ...current, paymentMethod: method.id }))}
+                style={{ border: form.paymentMethod === method.id ? '2px solid #d946ef' : '1px solid #ddd', padding: '10px', borderRadius: '8px', cursor: 'pointer', textAlign: 'center', background: '#f9f9f9', transition: 'all 0.2s' }}
+              >
+                <span style={{ fontSize: '0.9rem', fontWeight: form.paymentMethod === method.id ? 'bold' : 'normal' }}>{method.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         <button className="btn" type="submit" disabled={loading}>
-          {loading ? 'جارٍ تأكيد الطلب...' : 'تأكيد الطلب'}
+          {loading ? 'جارٍ معالجة الطلب...' : 'دفع و إتمام الطلب'}
         </button>
-        {!isPhoneValid && form.phone ? <p className="muted">رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.</p> : null}
-        {error ? <p className="muted">{error}</p> : null}
-      </motion.form>
+        {!isPhoneValid && form.phone && <p className="muted">رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.</p>}
+        {error && <p className="muted" style={{ color: '#ef4444' }}>{error}</p>}
+      </form>
     </section>
   );
 }

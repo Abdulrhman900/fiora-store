@@ -1,4 +1,4 @@
-﻿export type Product = {
+export type Product = {
   id: string;
   slug: string;
   name: string;
@@ -6,6 +6,7 @@
   price: number;
   image?: string;
   imageUrl?: string;
+  image_url?: string | null;
   category: string;
   featured?: boolean;
   variants?: ProductVariant[];
@@ -34,8 +35,7 @@ export type CheckoutForm = {
   fullName: string;
   phone: string;
   city: string;
-  address: string;
-  paymentMethod: 'cod' | 'card';
+  paymentMethod: 'mada' | 'visa' | 'tabby' | 'tamara';
   notes: string;
 };
 
@@ -45,7 +45,7 @@ export type OrderInsert = {
   phone: string;
   city: string;
   address: string;
-  payment_method: 'cod' | 'card';
+  payment_method: 'mada' | 'visa' | 'tabby' | 'tamara';
   notes: string;
   items: CartItem[];
   total_price: number;

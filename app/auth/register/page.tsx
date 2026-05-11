@@ -34,7 +34,7 @@ export default function RegisterPage() {
     <section className="hero-shell auth-shell">
       <div className="hero-copy">
         <p className="eyebrow">إنشاء حساب</p>
-        <h1 className="page-title">انضمي إلى تجربة فلورا</h1>
+        <h1 className="page-title">انضمي إلى تجربة FLORA</h1>
         <p className="page-copy">حساب عربي بسيط وسريع لتتبع الطلبات وإتمام الشراء داخل المتجر.</p>
       </div>
 

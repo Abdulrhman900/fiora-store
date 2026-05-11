@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CartDrawer from '../components/CartDrawer';
@@ -7,8 +7,8 @@ import { CartProvider } from '../context/CartContext';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "FLORA | فلورا - Women's Sports Gear",
-  description: 'متجر نسائي عربي RTL للأدوات والملابس الرياضية بتجربة سلة ودفع حديثة.',
+  title: 'FLORA',
+  description: 'متجر FLORA للأدوات والملابس الرياضية النسائية، خيارك الأول لأناقة ورياضة مستدامة.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

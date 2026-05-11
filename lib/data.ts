@@ -130,3 +130,4 @@ export const saudiCities = [
   'رفحاء',
   'القريات',
 ];
+

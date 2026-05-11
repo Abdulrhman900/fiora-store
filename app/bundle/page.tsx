@@ -15,7 +15,7 @@ export default function BundlePage() {
     <section className="stack">
       <div className="hero-shell">
         <div className="hero-copy">
-          <p className="eyebrow">بوكس فلورا</p>
+          <p className="eyebrow">بوكس FLORA</p>
           <h1 className="page-title">البوكس الرياضي المخصص للبداية السريعة</h1>
           <p className="page-copy">احصلي على بوكس متناسق يجمع بين منتج البداية الرياضية مع أفضل الأدوات المساعدة.</p>
           <div className="hero-badges">

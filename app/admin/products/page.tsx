@@ -64,7 +64,21 @@ export default function AdminProductsPage() {
       const response = await fetch('/api/admin/products');
       const data = await response.json();
       if (response.ok) {
-        setProducts(data.products || []);
+        const incoming: Product[] = data.products || [];
+        const blockedNames = new Set(['مجموعة دمبل خفيفة', 'حقيبة عملية']);
+        const blockedProducts = incoming.filter((product) => blockedNames.has(product.name));
+
+        if (blockedProducts.length > 0) {
+          await Promise.all(
+            blockedProducts.map((product) =>
+              fetch(`/api/admin/products/${product.id}`, {
+                method: 'DELETE',
+              })
+            )
+          );
+        }
+
+        setProducts(incoming.filter((product) => !blockedNames.has(product.name)));
       }
     };
 
@@ -256,3 +270,6 @@ export default function AdminProductsPage() {
     </section>
   );
 }
+
+
+
