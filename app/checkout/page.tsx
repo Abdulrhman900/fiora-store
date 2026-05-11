@@ -195,7 +195,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="stack" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
-            <span>موقع التوصيل (MAP)</span>
+            <span>موقع التوصيل</span>
             <div style={{ height: '280px', position: 'relative', background: 'linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%)', borderRadius: '8px', overflow: 'hidden', border: form.mapPinned ? '2px solid #10b981' : '1px solid #ccc' }}>
               <div
                 style={{
